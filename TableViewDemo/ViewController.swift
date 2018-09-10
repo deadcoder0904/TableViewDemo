@@ -15,11 +15,27 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
 
     @IBOutlet weak var table: NSTableView!
     var dreams = defaults[.dreams]
+    var selectedRow:Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         table.dataSource = self
         table.delegate = self
+    }
+    
+    override var acceptsFirstResponder : Bool {
+        return true
+    }
+    
+    override func keyDown(with theEvent: NSEvent) {
+        if theEvent.keyCode == 51 {
+            removeDream()
+        }
+    }
+    
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        let table = notification.object as! NSTableView
+        selectedRow = table.selectedRow
     }
 
     func numberOfRows(in tableView: NSTableView) -> Int {
@@ -38,21 +54,26 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
     }
     
     @IBAction func removeTableRow(_ sender: Any) {
-        print(sender)
-//        removeDream()
+        removeDream()
     }
     
     func addNewDream() {
-        dreams.append("Double Click or Press Enter to Add Workout")
+        dreams.append("Double Click or Press Enter to Add Item")
         table.beginUpdates()
-        table.insertRows(at: IndexSet(integer: dreams.count - 1), withAnimation: .effectFade)
+        let last = dreams.count - 1
+        table.insertRows(at: IndexSet(integer: last), withAnimation: .effectFade)
+        table.scrollRowToVisible(last)
+        table.selectRowIndexes([last], byExtendingSelection: false)
         table.endUpdates()
     }
  
     func removeDream() {
-        dreams.remove(at: 0)
+        if selectedRow >= dreams.count {
+            selectedRow = dreams.count - 1
+        }
+        if selectedRow != -1 {
+            dreams.remove(at: selectedRow)
+            table.removeRows(at: IndexSet(integer: selectedRow), withAnimation: .effectFade)
+        }
     }
 }
-
-
-
