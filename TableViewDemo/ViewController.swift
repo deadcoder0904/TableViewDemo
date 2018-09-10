@@ -70,6 +70,8 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
         let keyView = table.view(atColumn: 0, row: last, makeIfNecessary: false) as! NSTableCellView
         self.view.window!.makeFirstResponder(keyView.textField)
 
+        table.editColumn(0, row: last, with: nil, select: true)
+        
         saveDreams()
     }
  
