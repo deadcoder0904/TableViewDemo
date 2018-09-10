@@ -65,6 +65,7 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
         table.scrollRowToVisible(last)
         table.selectRowIndexes([last], byExtendingSelection: false)
         table.endUpdates()
+        saveDreams()
     }
  
     func removeDream() {
@@ -75,5 +76,10 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
             dreams.remove(at: selectedRow)
             table.removeRows(at: IndexSet(integer: selectedRow), withAnimation: .effectFade)
         }
+        saveDreams()
+    }
+    
+    func saveDreams() {
+        defaults[.dreams] = dreams
     }
 }
