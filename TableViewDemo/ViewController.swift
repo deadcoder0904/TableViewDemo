@@ -58,13 +58,18 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
     }
     
     func addNewDream() {
-        dreams.append("Double Click or Press Enter to Add Item")
+        dreams.append("")
         table.beginUpdates()
         let last = dreams.count - 1
         table.insertRows(at: IndexSet(integer: last), withAnimation: .effectFade)
         table.scrollRowToVisible(last)
         table.selectRowIndexes([last], byExtendingSelection: false)
         table.endUpdates()
+        
+        // focus on the last item, add cursor & start editing
+        let keyView = table.view(atColumn: 0, row: last, makeIfNecessary: false) as! NSTableCellView
+        self.view.window!.makeFirstResponder(keyView.textField)
+
         saveDreams()
     }
  
